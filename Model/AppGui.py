@@ -59,7 +59,7 @@ class PasswordManagerGUI(customtkinter.CTk):
                                                       hover_color=("gray70", "gray30"),
                                                       image=self.chat_image, anchor="w",
                                                       command=self.frame_2_button_event)
-        self.frame_2_button.grid(row=2, column=0, sticky="ew")
+
 
         self.frame_3_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                       border_spacing=10, text="Frame 3",
@@ -67,7 +67,7 @@ class PasswordManagerGUI(customtkinter.CTk):
                                                       hover_color=("gray70", "gray30"),
                                                       image=self.add_user_image, anchor="w",
                                                       command=self.frame_3_button_event)
-        self.frame_3_button.grid(row=3, column=0, sticky="ew")
+
 
         self.appearance_mode_menu = customtkinter.CTkOptionMenu(self.navigation_frame,
                                                                 values=["Dark", "Light", "System"],
@@ -112,6 +112,8 @@ class PasswordManagerGUI(customtkinter.CTk):
 
     def login(self):
         # Add your login logic here
+        self.frame_2_button.grid(row=2, column=0, sticky="ew")
+        self.frame_3_button.grid(row=3, column=0, sticky="ew")
 
         password = self.password_entry.get()
 
