@@ -12,7 +12,7 @@ class PasswordManagerGUI(customtkinter.CTk):
         super().__init__()
 
         self.title("Password Manager.py")
-        self.geometry("700x350")
+        self.geometry("700x450")
         customtkinter.set_appearance_mode('Dark')
         # set grid layout 1x2
         self.grid_rowconfigure(0, weight=1)
@@ -54,7 +54,7 @@ class PasswordManagerGUI(customtkinter.CTk):
         self.home_button.grid(row=1, column=0, sticky="ew")
 
         self.frame_2_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
-                                                      border_spacing=10, text="Frame 2",
+                                                      border_spacing=10, text="My Passwords",
                                                       fg_color="transparent", text_color=("gray10", "gray90"),
                                                       hover_color=("gray70", "gray30"),
                                                       image=self.chat_image, anchor="w",
@@ -62,7 +62,7 @@ class PasswordManagerGUI(customtkinter.CTk):
 
 
         self.frame_3_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
-                                                      border_spacing=10, text="Frame 3",
+                                                      border_spacing=10, text="Settings",
                                                       fg_color="transparent", text_color=("gray10", "gray90"),
                                                       hover_color=("gray70", "gray30"),
                                                       image=self.add_user_image, anchor="w",
@@ -114,8 +114,11 @@ class PasswordManagerGUI(customtkinter.CTk):
         # Add your login logic here
         self.frame_2_button.grid(row=2, column=0, sticky="ew")
         self.frame_3_button.grid(row=3, column=0, sticky="ew")
-
         password = self.password_entry.get()
+
+        self.unpacked_home_widgets()
+        self.connexion_frame()
+
 
         # Example: Check if username and password are correct
         if password == "password":
@@ -144,6 +147,16 @@ class PasswordManagerGUI(customtkinter.CTk):
         else:
             self.third_frame.grid_forget()
 
+    def connexion_frame(self):
+        self.home_title = customtkinter.CTkLabel(self.home_frame, text="Successfully connected to database !", font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.home_title.grid(row=0, column=0, padx=20, pady=(40, 2))
+    def unpacked_home_widgets(self):
+        self.password_entry.grid_forget()
+        self.login_button.grid_forget()
+        self.password_label.grid_forget()
+        self.welcome_label_subtitle.grid_forget()
+        self.welcome_label.grid_forget()
+        self.home_frame_large_image_label.grid_forget()
     def home_button_event(self):
         self.select_frame_by_name("home")
 
