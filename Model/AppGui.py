@@ -2,8 +2,10 @@ import os
 from PIL import Image
 from CTkTable import *
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, CENTER
 import customtkinter
+import Levenshtein
+import difflib
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -62,14 +64,12 @@ class PasswordManagerGUI(customtkinter.CTk):
                                                       image=self.chat_image, anchor="w",
                                                       command=self.frame_2_button_event)
 
-
         self.frame_3_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                       border_spacing=10, text="Settings",
                                                       fg_color="transparent", text_color=("gray10", "gray90"),
                                                       hover_color=("gray70", "gray30"),
                                                       image=self.add_user_image, anchor="w",
                                                       command=self.frame_3_button_event)
-
 
         self.appearance_mode_menu = customtkinter.CTkOptionMenu(self.navigation_frame,
                                                                 values=["Dark", "Light", "System"],
@@ -121,7 +121,6 @@ class PasswordManagerGUI(customtkinter.CTk):
         self.unpacked_home_widgets()
         self.connexion_frame()
 
-
         # Example: Check if username and password are correct
         if password == "password":
             print("Login successful")
@@ -150,30 +149,34 @@ class PasswordManagerGUI(customtkinter.CTk):
             self.third_frame.grid_forget()
 
     def connexion_frame(self):
-        self.home_title = customtkinter.CTkLabel(self.home_frame, text="Successfully connected to database !", font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.home_title = customtkinter.CTkLabel(self.home_frame, text="Successfully connected to database !",
+                                                 font=customtkinter.CTkFont(size=20, weight="bold"))
         self.home_title.grid(row=0, column=0, padx=20, pady=(40, 2))
 
-        self.table = ttk.Treeview(self.home_frame, columns=("Website","Password"))
-        custom_font = customtkinter.CTkFont(size=20, weight="bold")
-        self.table.heading("Website", text="Site Web")
-        self.table.heading("Password", text="Mot de passe")
-        self.table.heading('#0', text='ID')
-        self.table.column("#0", width=10)
+        self.table = ttk.Treeview(self.home_frame, columns=("Website", "Username", "Password"), show="headings")
+        custom_font = customtkinter.CTkFont(size=35, weight="bold")
+        self.table.heading("Website", text="Website")
+        self.table.heading("Password", text="Password")
+        self.table.heading("Username", text="Username")
+        self.table.column("#0", width=40)
+        for column in self.table["columns"]:
+            print(column)
+            self.table.column(column, anchor=CENTER)
         custom_style = ttk.Style()
+        custom_style.theme_use('default')
+        custom_style.configure("Treeview", font=custom_font, fieldbackground="silver", background='silver')
+        custom_style.configure("Treeview.Heading", font=custom_font, background="grey")
 
-        custom_style.configure("Treeview", font=custom_font, background="silver", fieldbackground="black")
-
-
-        self.table.insert("", "end", values=("www.example.com", "123456"))
-        self.table.insert("", "end", values=("www.testsite.com", "qwerty"))
-        self.table.insert("", "end", values=("www.demo.org", "p@ssw0rd"))
+        self.table.insert("", "end", values=("www.example.com", 'ef', "123456"))
+        self.table.insert("", "end", values=("www.testsite.com", 'ef', "qwerty"))
+        self.table.insert("", "end", values=("www.demo.org", 'ef', "p@ssw0rd"))
 
         self.table.grid(row=1, column=0, padx=20, pady=20)
-        self.search_entry = customtkinter.CTkEntry(self.home_frame)
-        self.search_entry.insert(0, 'Facebook...')
+        self.search_entry = customtkinter.CTkEntry(self.home_frame, placeholder_text="Enter Text..")
         self.search_entry.grid(row=2, column=0, padx=20, pady=(0, 2))
         self.search_button = customtkinter.CTkButton(self.home_frame, text="search",
-                                                   font=customtkinter.CTkFont(size=14, weight="bold"))
+                                                     font=customtkinter.CTkFont(size=14, weight="bold"),
+                                                     command=self.search)
         self.search_button.grid(row=3, column=0, padx=20, pady=(0, 2))
 
     def unpacked_home_widgets(self):
@@ -183,6 +186,7 @@ class PasswordManagerGUI(customtkinter.CTk):
         self.welcome_label_subtitle.grid_forget()
         self.welcome_label.grid_forget()
         self.home_frame_large_image_label.grid_forget()
+
     def home_button_event(self):
         self.select_frame_by_name("home")
 
@@ -194,9 +198,33 @@ class PasswordManagerGUI(customtkinter.CTk):
 
     def change_appearance_mode_event(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
+
     def change_scaling_event(self, new_scaling: str):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
         customtkinter.set_widget_scaling(new_scaling_float)
+
+    def search(self):
+        search_label = self.search_entry.get()
+
+        weblist = []
+
+        for item_id in self.table.get_children():
+            weblist.append(self.table.item(item_id, 'values')[0])
+
+        closest_string = difflib.get_close_matches(search_label, weblist, cutoff=0.3)
+
+        if len(closest_string) != 0:
+            for item_id in self.table.get_children():
+                if self.table.item(item_id, 'values')[0] == closest_string[0]:
+                    password = self.table.item(item_id, 'values')[2]
+                    self.search_entry.delete(0, tk.END)
+                    self.search_entry.insert(0, password)
+                    element = self.table.item(item_id, 'values')
+                    self.table.delete(item_id)
+                    self.table.insert('', '0', values=element)
+        else:
+            self.search_entry.delete(0, tk.END)
+            self.search_entry.insert(0, 'no match found')
 
 
 if __name__ == "__main__":
