@@ -1,6 +1,8 @@
 import os
 from PIL import Image
-
+from CTkTable import *
+import tkinter as tk
+from tkinter import ttk
 import customtkinter
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
@@ -150,6 +152,30 @@ class PasswordManagerGUI(customtkinter.CTk):
     def connexion_frame(self):
         self.home_title = customtkinter.CTkLabel(self.home_frame, text="Successfully connected to database !", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.home_title.grid(row=0, column=0, padx=20, pady=(40, 2))
+
+        self.table = ttk.Treeview(self.home_frame, columns=("Website","Password"))
+        custom_font = customtkinter.CTkFont(size=20, weight="bold")
+        self.table.heading("Website", text="Site Web")
+        self.table.heading("Password", text="Mot de passe")
+        self.table.heading('#0', text='ID')
+        self.table.column("#0", width=10)
+        custom_style = ttk.Style()
+
+        custom_style.configure("Treeview", font=custom_font, background="silver", fieldbackground="black")
+
+
+        self.table.insert("", "end", values=("www.example.com", "123456"))
+        self.table.insert("", "end", values=("www.testsite.com", "qwerty"))
+        self.table.insert("", "end", values=("www.demo.org", "p@ssw0rd"))
+
+        self.table.grid(row=1, column=0, padx=20, pady=20)
+        self.search_entry = customtkinter.CTkEntry(self.home_frame)
+        self.search_entry.insert(0, 'Facebook...')
+        self.search_entry.grid(row=2, column=0, padx=20, pady=(0, 2))
+        self.search_button = customtkinter.CTkButton(self.home_frame, text="search",
+                                                   font=customtkinter.CTkFont(size=14, weight="bold"))
+        self.search_button.grid(row=3, column=0, padx=20, pady=(0, 2))
+
     def unpacked_home_widgets(self):
         self.password_entry.grid_forget()
         self.login_button.grid_forget()
