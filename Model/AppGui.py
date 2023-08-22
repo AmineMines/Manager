@@ -58,7 +58,7 @@ class PasswordManagerGUI(customtkinter.CTk):
         self.home_button.grid(row=1, column=0, sticky="ew")
 
         self.frame_2_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
-                                                      border_spacing=10, text="My Passwords",
+                                                      border_spacing=10, text=" Add Password",
                                                       fg_color="transparent", text_color=("gray10", "gray90"),
                                                       hover_color=("gray70", "gray30"),
                                                       image=self.chat_image, anchor="w",
