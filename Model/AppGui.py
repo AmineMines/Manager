@@ -61,15 +61,15 @@ class PasswordManagerGUI(customtkinter.CTk):
                                                       border_spacing=10, text=" Add Password",
                                                       fg_color="transparent", text_color=("gray10", "gray90"),
                                                       hover_color=("gray70", "gray30"),
-                                                      image=self.chat_image, anchor="w",
+                                                      image=self.add_user_image, anchor="w",
                                                       command=self.frame_2_button_event)
 
-        self.frame_3_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
-                                                      border_spacing=10, text="Settings",
-                                                      fg_color="transparent", text_color=("gray10", "gray90"),
-                                                      hover_color=("gray70", "gray30"),
-                                                      image=self.add_user_image, anchor="w",
-                                                      command=self.frame_3_button_event)
+        #self.frame_3_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
+                                                  #    border_spacing=10, text="Settings",
+                                                  #   fg_color="transparent", text_color=("gray10", "gray90"),
+                                                  #    hover_color=("gray70", "gray30"),
+                                                  #    image=self.chat_image, anchor="w",
+                                                  #    command=self.frame_3_button_event)
 
         self.appearance_mode_menu = customtkinter.CTkOptionMenu(self.navigation_frame,
                                                                 values=["Dark", "Light", "System"],
@@ -115,7 +115,7 @@ class PasswordManagerGUI(customtkinter.CTk):
     def login(self):
         # Add your login logic here
         self.frame_2_button.grid(row=2, column=0, sticky="ew")
-        self.frame_3_button.grid(row=3, column=0, sticky="ew")
+       # self.frame_3_button.grid(row=3, column=0, sticky="ew")
         password = self.password_entry.get()
 
         self.unpacked_home_widgets()
@@ -132,7 +132,7 @@ class PasswordManagerGUI(customtkinter.CTk):
         # set button color for selected button
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
         self.frame_2_button.configure(fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
-        self.frame_3_button.configure(fg_color=("gray75", "gray25") if name == "frame_3" else "transparent")
+        #self.frame_3_button.configure(fg_color=("gray75", "gray25") if name == "frame_3" else "transparent")
 
         # show selected frame
         if name == "home":
@@ -149,6 +149,7 @@ class PasswordManagerGUI(customtkinter.CTk):
             self.third_frame.grid_forget()
 
     def connexion_frame(self):
+
         self.home_title = customtkinter.CTkLabel(self.home_frame, text="Successfully connected to database !",
                                                  font=customtkinter.CTkFont(size=20, weight="bold"))
         self.home_title.grid(row=0, column=0, padx=20, pady=(40, 2))
@@ -192,6 +193,7 @@ class PasswordManagerGUI(customtkinter.CTk):
 
     def frame_2_button_event(self):
         self.select_frame_by_name("frame_2")
+        self.adduser_frame_configuration()
 
     def frame_3_button_event(self):
         self.select_frame_by_name("frame_3")
@@ -226,7 +228,22 @@ class PasswordManagerGUI(customtkinter.CTk):
             self.search_entry.delete(0, tk.END)
             self.search_entry.insert(0, 'no match found')
 
-hjvjyhj
+    def adduser_frame_configuration(self):
+        self.title_second_frame = customtkinter.CTkLabel(self.second_frame, text='Add your new password to database', font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.title_second_frame.grid(row=0, column=0, padx=90, pady=40, sticky="nsew")
+        self.website_field = customtkinter.CTkEntry(self.second_frame, placeholder_text="Website")
+        self.website_field.grid(row=1, column=0, padx=20, pady=(0, 2), )
+        self.username_field = customtkinter.CTkEntry(self.second_frame, placeholder_text="Username")
+        self.username_field.grid(row=2, column=0, padx=20, pady=(0, 2), )
+        self.password_field = customtkinter.CTkEntry(self.second_frame, placeholder_text="Password")
+        self.password_field.grid(row=3, column=0, padx=20, pady=(0, 2))
+        self.submit_button = customtkinter.CTkButton(self.second_frame, text="submit",
+                                                     font=customtkinter.CTkFont(size=18, weight="bold"), command=self.adduser_function)
+        self.submit_button.grid(row=4, column=0, padx=20, pady=(20, 2),)
+
+    def adduser_function(self):
+
+
 
 if __name__ == "__main__":
     app = PasswordManagerGUI()
