@@ -226,6 +226,7 @@ class PasswordManagerGUI(customtkinter.CTk):
             self.search_entry.delete(0, tk.END)
             self.search_entry.insert(0, 'no match found')
 
+hjvjyhj
 
 if __name__ == "__main__":
     app = PasswordManagerGUI()
