@@ -237,11 +237,17 @@ class PasswordManagerGUI(customtkinter.CTk):
         self.username_field.grid(row=2, column=0, padx=20, pady=(0, 2), )
         self.password_field = customtkinter.CTkEntry(self.second_frame, placeholder_text="Password")
         self.password_field.grid(row=3, column=0, padx=20, pady=(0, 2))
-        self.submit_button = customtkinter.CTkButton(self.second_frame, text="submit",
+        self.submit_button = customtkinter.CTkButton(self.second_frame, text="SUBMIT",
                                                      font=customtkinter.CTkFont(size=18, weight="bold"), command=self.adduser_function)
         self.submit_button.grid(row=4, column=0, padx=20, pady=(20, 2),)
 
     def adduser_function(self):
+        website = self.website_field.get()
+        password = self.password_field.get()
+        username = self.username_field.get()
+
+
+
 
 
 
