@@ -1,12 +1,14 @@
 import mysql.connector
 
 class MySQLDatabase:
+
     def __init__(self, host, user, password, database):
         self.host = host
         self.user = user
         self.password = password
         self.database = database
         self.connection = None
+        self.connect()
 
     def connect(self):
         try:
