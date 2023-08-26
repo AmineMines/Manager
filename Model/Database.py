@@ -35,4 +35,4 @@ class MySQLDatabase:
             print("Query successful excuted")
         except mysql.connector.Error as err:
             print("Error when excuting query", err)
-        nvjvk
+        
