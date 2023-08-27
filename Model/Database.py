@@ -2,11 +2,11 @@ import mysql.connector
 
 class MySQLDatabase:
 
-    def __init__(self, host, user, password, database):
+    def __init__(self, host, user, password):
         self.host = host
         self.user = user
         self.password = password
-        self.database = database
+
         self.connection = None
         self.connect()
 
@@ -16,7 +16,7 @@ class MySQLDatabase:
                 host=self.host,
                 user=self.user,
                 password=self.password,
-                database=self.database
+
             )
             print("Successfull connection")
         except mysql.connector.Error as err:
