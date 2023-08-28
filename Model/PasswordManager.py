@@ -5,7 +5,6 @@ from Crypto.Util.Padding import pad, unpad
 import base64
 
 
-
 class PasswordManager:
     def __init__(self, encryption_key):
         self.passwords = {}
@@ -50,10 +49,10 @@ class PasswordManager:
         cipher = AES.new(self.encryption_key, AES.MODE_CBC, iv=iv)
         decrypted_text = unpad(cipher.decrypt(decoded_ciphertext[AES.block_size:]), AES.block_size)
         return decrypted_text.decode('utf-8')
+
     def get_passwords_dict(self):
         return self.passwords
-    def database(self, list_row):
+
+    def database_row(self, list_row):
         for id, website, username, password in list_row:
             self.add_password(website, username, password)
-            print(website,username,password)
-
