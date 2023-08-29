@@ -3,12 +3,20 @@ import string
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 import base64
+import hashlib
+
 
 
 class PasswordManager:
     def __init__(self, encryption_key):
         self.passwords = {}
-        self.encryption_key = encryption_key.encode('utf-8')
+
+        key = encryption_key
+        key = key.encode('utf-8')
+        hash_object = hashlib.sha256(key)
+        hash_bytes = hash_object.digest()
+
+        self.encryption_key = hash_bytes
 
     def add_password(self, website, username, password):
         self.passwords[website] = {'username': username, 'password': password}
