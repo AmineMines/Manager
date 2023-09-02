@@ -13,7 +13,9 @@ customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "gre
 class PasswordManagerGUI(customtkinter.CTk):
     def __init__(self):
         super().__init__()
+        self.database = None
         self.passwordManager = PasswordManager.PasswordManager("INSERT PASSWORD")
+        
         self.title("Password Manager.py")
         self.geometry("700x450")
         customtkinter.set_appearance_mode('Dark')
@@ -112,14 +114,20 @@ class PasswordManagerGUI(customtkinter.CTk):
         self.select_frame_by_name("home")
 
     def login(self):
-        Database.MySQLDatabase('localhost', 'root', 'wmk6Px2hnGad')
-        # Add your login logic here
+
+        self.database = Database.MySQLDatabase('localhost', 'root', 'wmk6Px2hnGAd', 'usere')
+        self.passwordManager.database_row(self.database.execute_query('SELECT * FROM passwords'))
+
+
+
+
         self.frame_2_button.grid(row=2, column=0, sticky="ew")
         self.frame_3_button.grid(row=3, column=0, sticky="ew")
         password = self.password_entry.get()
 
         self.unpacked_home_widgets()
         self.connexion_frame()
+        self.adduser_frame_configuration()
         self.adduser_frame_configuration()
 
         # Example: Check if username and password are correct
@@ -162,16 +170,18 @@ class PasswordManagerGUI(customtkinter.CTk):
         self.table.heading("Username", text="Username")
         self.table.column("#0", width=40)
         for column in self.table["columns"]:
-            print(column)
             self.table.column(column, anchor=CENTER)
         custom_style = ttk.Style()
         custom_style.theme_use('default')
         custom_style.configure("Treeview", font=custom_font, fieldbackground="silver", background='silver')
         custom_style.configure("Treeview.Heading", font=custom_font, background="grey")
 
-        self.table.insert("", "end", values=("www.example.com", 'ef', "123456"))
-        self.table.insert("", "end", values=("www.testsite.com", 'ef', "qwerty"))
-        self.table.insert("", "end", values=("www.demo.org", 'ef', "p@ssw0rd"))
+        for website, credentials in self.passwordManager.get_passwords_dict().items():
+            username = credentials['username']
+            password = self.passwordManager._decrypt(credentials['password'])
+
+            self.table.insert("", "end", values=(website, username, password))
+
 
         self.table.grid(row=1, column=0, padx=20, pady=20)
         self.search_entry = customtkinter.CTkEntry(self.home_frame, placeholder_text="Enter Text..")
@@ -263,16 +273,25 @@ class PasswordManagerGUI(customtkinter.CTk):
         password = self.password_field.get()
         username = self.username_field.get()
 
+        self.table.insert("", "end", values=(website, username, password))
+        CTkMessagebox(title="Generate Password", message="Successfully add", icon='info')
+        password = self.passwordManager._encrypt(password)
+        self.database.execute_query(f"INSERT INTO passwords (website, username, password) VALUES ('{website}', '{username}', '{password}')")
+
     def generate_password_popup(self):
         website = self.website_field_third.get()
         username = self.username_field_third.get()
         password = self.passwordManager.generate_password(24)
+
         self.password_popup = CTkMessagebox(title="Generate Password", message="Website={}, Username={}, Password={}".
                                             format(website, username, password)
                                             , icon='check', option_1='Add to database'
-                                            , option_2='Copy', password=password)
-
-
+                                            , option_2='Copy', password=password, website=website, username=username)
+        if self.password_popup.get() == 'add':
+            self.table.insert("", "end", values=(website, username, password))
+            password = self.passwordManager._encrypt(password)
+            self.database.execute_query(f"INSERT INTO passwords (website, username, password) "
+                                        f"VALUES ('{website}', '{username}', '{password}')")
 
 
 
