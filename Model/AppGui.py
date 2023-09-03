@@ -115,7 +115,7 @@ class PasswordManagerGUI(customtkinter.CTk):
 
     def login(self):
 
-        self.database = Database.MySQLDatabase('localhost', 'root', 'wmk6Px2hnGAd', 'usere')
+        self.database = Database.MySQLDatabase('localhost', 'root', 'vzzef', 'usere')
         self.passwordManager.database_row(self.database.execute_query('SELECT * FROM passwords'))
 
 
