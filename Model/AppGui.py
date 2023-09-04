@@ -14,7 +14,7 @@ class PasswordManagerGUI(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.database = None
-        self.passwordManager = PasswordManager.PasswordManager("INSERT PASSWORD")
+        self.passwordManager = PasswordManager.PasswordManager("Données à hacher")
         
         self.title("Password Manager.py")
         self.geometry("700x450")
@@ -115,7 +115,7 @@ class PasswordManagerGUI(customtkinter.CTk):
 
     def login(self):
 
-        self.database = Database.MySQLDatabase('localhost', 'root', 'vzzef', 'usere')
+        self.database = Database.MySQLDatabase('localhost', 'root', '<wmk6Px2hnGAd>', 'usere')
         self.passwordManager.database_row(self.database.execute_query('SELECT * FROM passwords'))
 
 
@@ -178,6 +178,7 @@ class PasswordManagerGUI(customtkinter.CTk):
 
         for website, credentials in self.passwordManager.get_passwords_dict().items():
             username = credentials['username']
+            print(credentials['password'])
             password = self.passwordManager._decrypt(credentials['password'])
 
             self.table.insert("", "end", values=(website, username, password))
